@@ -12,6 +12,15 @@ public class ButtonController : MonoBehaviour
 
     #endregion
 
+    #region Properties
+    public List<int> ListSequence
+    {
+        get { return _listSequence; }
+        set { }
+    }
+
+    #endregion
+
     #region Events
     public static event Action OnFinishGame;
 
@@ -19,12 +28,21 @@ public class ButtonController : MonoBehaviour
 
     #region Methods
 
-    //Create random values when this start
+    //Create 3 unique values to start the game
     private void RandmomValuesToStart()
     {
-        _listSequence.Add(UnityEngine.Random.Range(1, 5));
-        _listSequence.Add(UnityEngine.Random.Range(1, 5));
-        _listSequence.Add(UnityEngine.Random.Range(1, 5));
+        for (int i = 0; i < 3; i++)
+        {
+            int newValue;
+
+            do
+            {
+                newValue = UnityEngine.Random.Range(1, 5);
+            }
+            while (_listSequence.Contains(newValue));
+
+            _listSequence.Add(newValue);
+        }
 
         foreach (int value in _listSequence)
             Debug.Log($"Valor generado: {value}");
