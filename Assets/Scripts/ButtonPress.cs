@@ -4,21 +4,44 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ControlButtons : MonoBehaviour, IPointerDownHandler
+public class ButtonPress : MonoBehaviour, IPointerClickHandler
 {
-    //Field
+    #region Fields
     [SerializeField] private int _buttonID;
 
-    //Events
-    public static event Action<int> UpButtonTouched;
+    #endregion
+
+    #region Events
+    public static event Action<int> OnButtonTouched;
+
+    #endregion
+
+    #region Methods
 
     //This method can be use with muse or hand!!!!!!!!!
-    public void OnPointerDown(PointerEventData eventData) => Touch();
+    public void OnPointerClick(PointerEventData eventData) => Touch();
 
     private void Touch()
     {
-        UpButtonTouched?.Invoke(_buttonID);
-        Debug.Log(_buttonID);
+        //Goes to "ButtonController"
+        OnButtonTouched?.Invoke(_buttonID);
     }
+
+    private void DiseableObject() => gameObject.SetActive(false);
+
+    #endregion
+
+    #region Unity Callbacks
+    private void OnEnable()
+    {
+        ButtonController.OnFinishGame += DiseableObject;
+    }
+
+    private void OnDisable()
+    {
+        ButtonController.OnFinishGame -= DiseableObject;
+    }
+
+    #endregion
 
 }
