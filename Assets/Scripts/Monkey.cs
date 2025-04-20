@@ -24,12 +24,19 @@ public class Monkey : MonoBehaviour
     public static event Action OnDiseableButtons; //Goes to ButtonPress
 
     #region Methods
+
+    private void CallDance()
+    {
+        _monkeySpriteRender.enabled = true;
+        StartCoroutine(CountingToStartRound());
+
+    }
     //Give 3 seconds to leet dance the monkey. Then, call a method to make sequency
     IEnumerator CountingToStartRound()
     {
-        Debug.Log("Inicia Corrutina");
-        yield return new WaitForSeconds(3f);
-        _monkeyAnimator.enabled = false;
+        // Debug.Log("Inicia Corrutina");
+        // yield return new WaitForSeconds(3f);
+        // _monkeyAnimator.enabled = false;
 
         OnDiseableButtons?.Invoke();
 
@@ -92,6 +99,7 @@ public class Monkey : MonoBehaviour
 
     private void OnEnable()
     {
+        Counting.OnStartDanceMonkey += CallDance;
         ButtonController.OnFinishGame += DiseableMonkeyForGameOver;
     }
 
@@ -103,7 +111,6 @@ public class Monkey : MonoBehaviour
     private void Start()
     {
         _allSequence = FindFirstObjectByType<ButtonController>();
-        StartCoroutine(CountingToStartRound());
     }
 
     #endregion

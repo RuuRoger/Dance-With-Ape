@@ -1,47 +1,55 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class ButtonPress : MonoBehaviour, IPointerClickHandler
 {
     #region Fields
     [SerializeField] private int _buttonID;
+    private bool _isInteractable;
 
     #endregion
 
     #region Events
-    public static event Action<int> OnButtonTouched;
+    public static event Action<int> OnButtonTouched; // Goes to ButtonController
 
     #endregion
 
     #region Methods
 
-    //This method can be use with muse or hand!!!!!!!!!
-    public void OnPointerClick(PointerEventData eventData) => Touch();
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (_isInteractable)
+            Touch();
+    }
 
     private void Touch()
     {
-        //Goes to "ButtonController"
         OnButtonTouched?.Invoke(_buttonID);
     }
 
-    private void DiseableObject() => this.enabled = false;
+    public void EnableButton() => _isInteractable = true;
+    public void DisableButton() => _isInteractable = false;
 
     #endregion
 
     #region Unity Callbacks
+    private void Awake()
+    {
+        _isInteractable = false;
+    }
+
     private void OnEnable()
     {
-        ButtonController.OnFinishGame += DiseableObject;
+        ButtonController.OnFinishGame += DisableButton;
+        Monkey.OnEnableButtons += EnableButton;
     }
 
     private void OnDisable()
     {
-        ButtonController.OnFinishGame -= DiseableObject;
+        ButtonController.OnFinishGame -= DisableButton;
     }
 
     #endregion
-
 }
+
