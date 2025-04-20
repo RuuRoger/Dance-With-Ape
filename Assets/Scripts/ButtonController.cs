@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class ButtonController : MonoBehaviour
@@ -9,6 +10,7 @@ public class ButtonController : MonoBehaviour
     #region Fields
     [SerializeField] private int _lives;
     [SerializeField] private GameObject _crossError;
+    [SerializeField] private Button[] _buttonsToPlay;
     private List<int> _listSequence = new List<int>();
     private List<int> _playerSequence = new List<int>();
 
@@ -115,22 +117,44 @@ public class ButtonController : MonoBehaviour
             OnFinishGame?.Invoke(); //Goes to ButtonPRess
     }
 
+    private void EnableAllButtons()
+    {
+        foreach (Button button in _buttonsToPlay)
+            button.interactable = true;
+    }
+
+    private void DiseableAllButtons()
+    {
+        foreach (Button button in _buttonsToPlay)
+            button.interactable = false;
+    }
+
     #endregion
 
     #region Unity Callbacks
     private void Awake()
     {
         RandmomValuesToStart();
+        DiseableAllButtons();
+    }
+
+    private void Start()
+    {
+
     }
 
     private void OnEnable()
     {
         ButtonPress.OnButtonTouched += ButtonsValueSequencie;
+        Monkey.OnEnableButtons += EnableAllButtons;
+        Monkey.OnDiseableButtons += DiseableAllButtons;
     }
 
     private void OnDisable()
     {
         ButtonPress.OnButtonTouched -= ButtonsValueSequencie;
+        Monkey.OnEnableButtons -= EnableAllButtons;
+        Monkey.OnDiseableButtons -= DiseableAllButtons;
     }
 
     private void Update()

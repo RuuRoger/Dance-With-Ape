@@ -1636,6 +1636,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lives: 3
   _crossError: {fileID: 1242037708}
+  _buttonsToPlay:
+  - {fileID: 1035830267}
+  - {fileID: 1212052611}
+  - {fileID: 974226127}
+  - {fileID: 995985544}
 --- !u!1 &1990131455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1869,6 +1874,7 @@ MonoBehaviour:
   _monkeySpriteRight: {fileID: -1099533018, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
   _monkeySpriteDown: {fileID: -510631239, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
   _monkeySpriteLeft: {fileID: -573362071, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
+  _scriptPressButton: {fileID: 0}
 --- !u!82 &1999452801
 AudioSource:
   m_ObjectHideFlags: 0

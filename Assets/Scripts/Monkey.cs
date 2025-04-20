@@ -1,5 +1,6 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Monkey : MonoBehaviour
@@ -9,6 +10,7 @@ public class Monkey : MonoBehaviour
     [SerializeField] private Sprite _monkeySpriteRight;
     [SerializeField] private Sprite _monkeySpriteDown;
     [SerializeField] private Sprite _monkeySpriteLeft;
+    [SerializeField] private GameObject _scriptPressButton;
 
     private Animator _monkeyAnimator;
     private SpriteRenderer _monkeySpriteRender;
@@ -16,6 +18,10 @@ public class Monkey : MonoBehaviour
     private AudioSource _monkeyAudioSource;
 
     #endregion
+
+    //Events
+    public static event Action OnEnableButtons; //Goes to ButtonPress
+    public static event Action OnDiseableButtons; //Goes to ButtonPress
 
     #region Methods
     //Give 3 seconds to leet dance the monkey. Then, call a method to make sequency
@@ -25,6 +31,8 @@ public class Monkey : MonoBehaviour
         yield return new WaitForSeconds(3f);
         _monkeyAnimator.enabled = false;
 
+        OnDiseableButtons?.Invoke();
+
         foreach (int value in _allSequence.ListSequence)
         {
             ChangeSprite(value);
@@ -33,7 +41,7 @@ public class Monkey : MonoBehaviour
 
         _monkeySpriteRender.flipY = false; //Reset
         _monkeyAnimator.enabled = true;
-
+        OnEnableButtons?.Invoke();
     }
 
     //Change the sprites base on the values in the list and play sound in movement

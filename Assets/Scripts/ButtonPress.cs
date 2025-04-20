@@ -27,7 +27,7 @@ public class ButtonPress : MonoBehaviour, IPointerClickHandler
         OnButtonTouched?.Invoke(_buttonID);
     }
 
-    private void DiseableObject() => gameObject.SetActive(false);
+    private void DiseableObject() => this.enabled = false;
 
     #endregion
 
