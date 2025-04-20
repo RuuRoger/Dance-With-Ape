@@ -1664,6 +1664,7 @@ GameObject:
   - component: {fileID: 1999452799}
   - component: {fileID: 1999452798}
   - component: {fileID: 1999452797}
+  - component: {fileID: 1999452800}
   m_Layer: 0
   m_Name: Monkey
   m_TagString: Untagged
@@ -1757,12 +1758,28 @@ Transform:
   m_GameObject: {fileID: 1999452796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.85, y: 4.26, z: 0}
+  m_LocalPosition: {x: 0.13, y: 1.93, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1999452800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999452796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a7e5bf591476c4cba097aa10a9ff5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _monkeySpriteUp: {fileID: -510631239, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
+  _monkeySpriteRight: {fileID: -1099533018, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
+  _monkeySpriteDown: {fileID: -510631239, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
+  _monkeySpriteLeft: {fileID: -573362071, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
