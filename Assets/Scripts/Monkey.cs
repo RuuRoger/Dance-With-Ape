@@ -70,6 +70,8 @@ public class Monkey : MonoBehaviour
         }
     }
 
+    private void DiseableMonkeyForGameOver() => this.gameObject.SetActive(false);
+
     #endregion
 
     #region Unity Callbacks
@@ -78,6 +80,16 @@ public class Monkey : MonoBehaviour
         _monkeyAnimator = GetComponent<Animator>();
         _monkeySpriteRender = GetComponent<SpriteRenderer>();
         _monkeyAudioSource = GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
+    {
+        ButtonController.OnFinishGame += DiseableMonkeyForGameOver;
+    }
+
+    private void OnDisable()
+    {
+        ButtonController.OnFinishGame -= DiseableMonkeyForGameOver;
     }
 
     private void Start()

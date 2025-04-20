@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 
 public class ButtonController : MonoBehaviour
 {
     #region Fields
     [SerializeField] private int _lives;
+    [SerializeField] private GameObject _crossError;
     private List<int> _listSequence = new List<int>();
     private List<int> _playerSequence = new List<int>();
 
@@ -85,7 +87,7 @@ public class ButtonController : MonoBehaviour
         {
             if (_playerSequence[i] != _listSequence[i])
             {
-                Debug.Log("Has fallado");
+                StartCoroutine(ErrorGame());
                 _lives--;
                 Debug.Log($"Vidas: {_lives}");
                 _playerSequence.Clear();
@@ -95,6 +97,15 @@ public class ButtonController : MonoBehaviour
 
         if (_playerSequence.Count == _listSequence.Count)
             Debug.Log("Siguiente ronda");
+    }
+
+    IEnumerator ErrorGame()
+    {
+        Time.timeScale = 0;
+        _crossError.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.5f); //Importante!! Con waitforseconds no funciona bien al desactivación
+        _crossError.gameObject.SetActive(false);
+        Time.timeScale = 1;
     }
 
     //Looks if lives is 0 or not, to notify stop the game
