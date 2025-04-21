@@ -4,36 +4,34 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 
-
 public class ButtonController : MonoBehaviour
 {
     #region Fields
     [SerializeField] private int _lives;
     [SerializeField] private GameObject _crossError;
     [SerializeField] private Button[] _buttonsToPlay;
+
     private List<int> _listSequence = new List<int>();
     private List<int> _playerSequence = new List<int>();
 
     #endregion
 
     #region Properties
-    public List<int> ListSequence
-    {
-        get { return _listSequence; }
-        set { }
-    }
+    public List<int> ListSequence => _listSequence;
 
     #endregion
 
     #region Events
-    public static event Action OnFinishGame;
+    public static event Action OnFinishGame; //Goes to "Monkey"
+    public static event Action OnTurnCountAgain; // Goes to "Counting"
+    public static event Action OnStopDanceMonkey; // Goes to "Monkey"
 
     #endregion
 
     #region Methods
 
-    //Create 3 unique values to start the game
-    private void RandmomValuesToStart()
+    // Generate unique values for the starting sequence
+    private void GenerateInitialSequence()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -48,73 +46,61 @@ public class ButtonController : MonoBehaviour
             _listSequence.Add(newValue);
         }
 
-        foreach (int value in _listSequence)
-            Debug.Log($"Valor generado: {value}");
+        Debug.Log($"Initial sequence: {string.Join(", ", _listSequence)}");
     }
 
-    //Look what button was touched to then says if is correct or not
-    private void ButtonsValueSequencie(int value)
+    // Handle button press and add value to player's sequence
+    private void HandleButtonPress(int value)
     {
-
-
-        switch (value)
-        {
-            case 1:
-                Debug.Log($"Se ha pulsado {value}");
-                break;
-
-            case 2:
-                Debug.Log($"Se ha pulsado {value}");
-                break;
-
-            case 3:
-                Debug.Log($"Se ha pulsado {value}");
-                break;
-
-            case 4:
-                Debug.Log($"Se ha pulsado {value}");
-                break;
-
-                //Not necessary default
-        }
-
         _playerSequence.Add(value);
+        Debug.Log($"Button pressed: {value}");
         CheckPlayerSequence();
     }
 
-    //Check if value is equals with the list for the monkey movement
+    // Check if player's sequence matches the monkey's sequence
     private void CheckPlayerSequence()
     {
         for (int i = 0; i < _playerSequence.Count; i++)
         {
             if (_playerSequence[i] != _listSequence[i])
             {
-                StartCoroutine(ErrorGame());
+                StartCoroutine(HandleError());
                 _lives--;
-                Debug.Log($"Vidas: {_lives}");
+                Debug.Log($"Lives left: {_lives}");
                 _playerSequence.Clear();
                 return;
             }
         }
 
+        // Move to the next round if the sequence matches completely
         if (_playerSequence.Count == _listSequence.Count)
-            Debug.Log("Siguiente ronda");
+        {
+            Debug.Log("Round complete! Generating next sequence...");
+            _playerSequence.Clear();
+            _listSequence.Add(UnityEngine.Random.Range(1, 5));
+            OnStopDanceMonkey?.Invoke();
+            OnTurnCountAgain?.Invoke();
+        }
     }
 
-    IEnumerator ErrorGame()
+    // Handle error state visually and reset
+    private IEnumerator HandleError()
     {
         Time.timeScale = 0;
-        _crossError.gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(0.5f); //Importante!! Con waitforseconds no funciona bien al desactivación
-        _crossError.gameObject.SetActive(false);
+        _crossError.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.5f);
+        _crossError.SetActive(false);
         Time.timeScale = 1;
     }
 
-    //Looks if lives is 0 or not, to notify stop the game
-    private void GameOver()
+    // Check for game over
+    private void CheckGameOver()
     {
-        if (_lives == 0)
-            OnFinishGame?.Invoke(); //Goes to ButtonPRess
+        if (_lives <= 0)
+        {
+            Debug.Log("Game over!");
+            OnFinishGame?.Invoke();
+        }
     }
 
     private void EnableAllButtons()
@@ -123,7 +109,7 @@ public class ButtonController : MonoBehaviour
             button.interactable = true;
     }
 
-    private void DiseableAllButtons()
+    private void DisableAllButtons()
     {
         foreach (Button button in _buttonsToPlay)
             button.interactable = false;
@@ -134,34 +120,28 @@ public class ButtonController : MonoBehaviour
     #region Unity Callbacks
     private void Awake()
     {
-        RandmomValuesToStart();
-        DiseableAllButtons();
-    }
-
-    private void Start()
-    {
-
+        GenerateInitialSequence();
+        DisableAllButtons();
     }
 
     private void OnEnable()
     {
-        ButtonPress.OnButtonTouched += ButtonsValueSequencie;
+        ButtonPress.OnButtonTouched += HandleButtonPress;
         Monkey.OnEnableButtons += EnableAllButtons;
-        Monkey.OnDiseableButtons += DiseableAllButtons;
+        Monkey.OnDisableButtons += DisableAllButtons;
     }
 
     private void OnDisable()
     {
-        ButtonPress.OnButtonTouched -= ButtonsValueSequencie;
+        ButtonPress.OnButtonTouched -= HandleButtonPress;
         Monkey.OnEnableButtons -= EnableAllButtons;
-        Monkey.OnDiseableButtons -= DiseableAllButtons;
+        Monkey.OnDisableButtons -= DisableAllButtons;
     }
 
     private void Update()
     {
-        GameOver();
+        CheckGameOver();
     }
 
     #endregion
-
 }

@@ -1520,6 +1520,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bipCounter: {fileID: 8300000, guid: 079b04c903fd1b04fa72574209e4518c, type: 3}
   _bipFinishCounter: {fileID: 8300000, guid: e97276b9638237f4696069ba748d849b, type: 3}
+  _buttons:
+  - {fileID: 1035830263}
+  - {fileID: 974226123}
+  - {fileID: 1212052609}
+  - {fileID: 995985543}
 --- !u!82 &1061601058
 AudioSource:
   m_ObjectHideFlags: 0

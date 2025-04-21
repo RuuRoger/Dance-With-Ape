@@ -6,47 +6,89 @@ using System;
 
 public class Counting : MonoBehaviour
 {
+    #region Fields
+    [Header("Audios")]
     [SerializeField] private AudioClip _bipCounter;
     [SerializeField] private AudioClip _bipFinishCounter;
+
+    [Header("Buttons to Control")]
+    [SerializeField] private GameObject[] _buttons;
+
     private TMP_Text _textCountingToStartRound;
-    private AudioSource _textAudiosource;
+    private AudioSource _textAudioSource;
 
-    //Events
-    public static event Action OnStartDanceMonkey;
+    #endregion
 
-    IEnumerator CountingToStartRound()
+    #region Events
+    public static event Action OnStartDanceMonkey; //Goes to "Monkey"
+
+    #endregion
+
+    #region Methods
+
+    //Let start coroutine
+    private void TriggerCountingRound() => StartCoroutine(CountingToStartRound());
+
+    /*
+    This croutine do:
+    1. Make numbers/text visible
+    2. DIseable buttons
+    3.Count to "start" with a yoyo efect
+    4. Enable again the buttons
+    5. Notify to Monkey that can start to dance
+    */
+
+    private IEnumerator CountingToStartRound()
     {
-        _textCountingToStartRound.color = new Color(
-        _textCountingToStartRound.color.r,
-        _textCountingToStartRound.color.g,
-        _textCountingToStartRound.color.b,
-        1);
+        _textCountingToStartRound.alpha = 1f;
 
-        _textAudiosource.clip = _bipCounter;
-        _textCountingToStartRound.text = 3.ToString();
-        _textAudiosource.Play();
-        yield return _textCountingToStartRound.transform.DOScale(1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).WaitForCompletion();
+        foreach (GameObject button in _buttons)
+        {
+            button.SetActive(false);
+        }
 
-        _textCountingToStartRound.text = 2.ToString();
-        _textAudiosource.Play();
-        yield return _textCountingToStartRound.transform.DOScale(1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).WaitForCompletion();
-
-        _textCountingToStartRound.text = 1.ToString();
-        _textAudiosource.Play();
-        yield return _textCountingToStartRound.transform.DOScale(1.5f, 0.25f).SetLoops(2, LoopType.Yoyo).WaitForCompletion();
+        for (int i = 3; i > 0; i--)
+        {
+            _textCountingToStartRound.text = i.ToString();
+            _textAudioSource.clip = _bipCounter;
+            _textAudioSource.Play();
+            yield return _textCountingToStartRound.transform
+                .DOScale(1.5f, 0.25f)
+                .SetLoops(2, LoopType.Yoyo)
+                .WaitForCompletion();
+        }
 
         _textCountingToStartRound.text = "Go!";
-        _textAudiosource.clip = _bipFinishCounter;
-        _textAudiosource.Play();
-        yield return _textCountingToStartRound.DOFade(0, 0.5f).WaitForCompletion(); // Desvanecimiento completo
+        _textAudioSource.clip = _bipFinishCounter;
+        _textAudioSource.Play();
+        yield return _textCountingToStartRound.DOFade(0, 0.5f).WaitForCompletion();
+
+        foreach (GameObject button in _buttons)
+        {
+            button.SetActive(true);
+        }
 
         OnStartDanceMonkey?.Invoke();
     }
 
+    #endregion
+
+    #region Unity Callbacks
+
     private void Awake()
     {
         _textCountingToStartRound = GetComponent<TMP_Text>();
-        _textAudiosource = GetComponent<AudioSource>();
+        _textAudioSource = GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
+    {
+        ButtonController.OnTurnCountAgain += TriggerCountingRound;
+    }
+
+    private void OnDisable()
+    {
+        ButtonController.OnTurnCountAgain -= TriggerCountingRound;
     }
 
     private void Start()
@@ -54,9 +96,5 @@ public class Counting : MonoBehaviour
         StartCoroutine(CountingToStartRound());
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.H))
-            StartCoroutine(CountingToStartRound());
-    }
+    #endregion
 }

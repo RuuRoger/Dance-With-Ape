@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class ButtonPress : MonoBehaviour, IPointerClickHandler
 {
     #region Fields
+    [Header("Buttons ID")]
     [SerializeField] private int _buttonID;
     private bool _isInteractable;
 
@@ -17,23 +18,28 @@ public class ButtonPress : MonoBehaviour, IPointerClickHandler
 
     #region Methods
 
+    //If boolean is true, let use buttons
     public void OnPointerClick(PointerEventData eventData)
     {
         if (_isInteractable)
-            Touch();
+        {
+            TriggerButton();
+        }
     }
 
-    private void Touch()
-    {
-        OnButtonTouched?.Invoke(_buttonID);
-    }
+    //Notify what button press the player
+    private void TriggerButton() => OnButtonTouched?.Invoke(_buttonID);
 
+    //Flag. Let active buttons
     public void EnableButton() => _isInteractable = true;
+
+    //Flag. Diseable use buttons
     public void DisableButton() => _isInteractable = false;
 
     #endregion
 
     #region Unity Callbacks
+
     private void Awake()
     {
         _isInteractable = false;
@@ -43,13 +49,15 @@ public class ButtonPress : MonoBehaviour, IPointerClickHandler
     {
         ButtonController.OnFinishGame += DisableButton;
         Monkey.OnEnableButtons += EnableButton;
+        Monkey.OnDisableButtons += DisableButton;
     }
 
     private void OnDisable()
     {
         ButtonController.OnFinishGame -= DisableButton;
+        Monkey.OnEnableButtons -= EnableButton;
+        Monkey.OnDisableButtons -= DisableButton;
     }
 
     #endregion
 }
-
