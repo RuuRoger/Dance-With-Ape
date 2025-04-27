@@ -2129,7 +2129,7 @@ MonoBehaviour:
   _monkeySpriteRight: {fileID: -1099533018, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
   _monkeySpriteDown: {fileID: -510631239, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
   _monkeySpriteLeft: {fileID: -573362071, guid: 18e178801c1104c45938d1a785b2aa82, type: 3}
-  _scriptPressButton: {fileID: 0}
+  _scriptPressButton: {fileID: 1990131455}
 --- !u!82 &1999452801
 AudioSource:
   m_ObjectHideFlags: 0
