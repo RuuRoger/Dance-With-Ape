@@ -23,9 +23,10 @@ public class ButtonController : MonoBehaviour
     #endregion
 
     #region Events
-    public static event Action OnFinishGame; //Goes to "Monkey"
     public static event Action OnTurnCountAgain; // Goes to "Counting"
     public static event Action OnStopDanceMonkey; // Goes to "Monkey"
+    public static event Action OnFadeUI; //Goes to ScoreAndLives
+    public static event Action OnLivesUI;
 
     #endregion
 
@@ -66,8 +67,7 @@ public class ButtonController : MonoBehaviour
             if (_playerSequence[i] != _listSequence[i])
             {
                 StartCoroutine(HandleError());
-                _lives--;
-                Debug.Log($"Lives left: {_lives}");
+                OnLivesUI?.Invoke();
                 _playerSequence.Clear();
                 return;
             }
@@ -80,6 +80,7 @@ public class ButtonController : MonoBehaviour
             _playerSequence.Clear();
             _listSequence.Add(UnityEngine.Random.Range(1, 5));
             OnStopDanceMonkey?.Invoke();
+            OnFadeUI?.Invoke();
             OnTurnCountAgain?.Invoke();
         }
     }
@@ -95,14 +96,7 @@ public class ButtonController : MonoBehaviour
     }
 
     // Check for game over
-    private void CheckGameOver()
-    {
-        if (_lives <= 0)
-        {
-            Debug.Log("Game over!");
-            OnFinishGame?.Invoke();
-        }
-    }
+
 
     private void EnableAllButtons()
     {
@@ -137,11 +131,6 @@ public class ButtonController : MonoBehaviour
         ButtonPress.OnButtonTouched -= HandleButtonPress;
         Monkey.OnEnableButtons -= EnableAllButtons;
         Monkey.OnDisableButtons -= DisableAllButtons;
-    }
-
-    private void Update()
-    {
-        CheckGameOver();
     }
 
     #endregion

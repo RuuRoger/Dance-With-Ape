@@ -24,6 +24,7 @@ public class Monkey : MonoBehaviour
     #region Events
     public static event Action OnEnableButtons; // Goes to ButtonPress
     public static event Action OnDisableButtons; // Goes to ButtonPress
+    public static event Action OnShowScoreAndLive; //Goes to ScoreAndLives
 
     #endregion
 
@@ -32,7 +33,9 @@ public class Monkey : MonoBehaviour
     //Active spriterender monkey and start coroutine
     private void StartDance()
     {
+
         _monkeySpriteRenderer.enabled = true;
+        OnShowScoreAndLive?.Invoke();
         StartCoroutine(PlaySequence());
     }
 
@@ -132,7 +135,7 @@ public class Monkey : MonoBehaviour
     private void OnEnable()
     {
         Counting.OnStartDanceMonkey += StartDance;
-        ButtonController.OnFinishGame += DisableMonkeyForGameOver;
+        ScoreAndLives.OnFinishGame += DisableMonkeyForGameOver;
         ButtonController.OnStopDanceMonkey += StopDanceForRound;
         Monkey.OnEnableButtons += EnableIdleAnimation; // Restore idle animation during wait
     }
@@ -140,7 +143,7 @@ public class Monkey : MonoBehaviour
     private void OnDisable()
     {
         Counting.OnStartDanceMonkey -= StartDance;
-        ButtonController.OnFinishGame -= DisableMonkeyForGameOver;
+        ScoreAndLives.OnFinishGame -= DisableMonkeyForGameOver;
         ButtonController.OnStopDanceMonkey -= StopDanceForRound;
         Monkey.OnEnableButtons -= EnableIdleAnimation; // Unsubscribe idle animation event
     }
