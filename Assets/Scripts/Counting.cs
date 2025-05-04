@@ -71,6 +71,14 @@ public class Counting : MonoBehaviour
         OnStartDanceMonkey?.Invoke();
     }
 
+    private void GameOverDiseabelButtons()
+    {
+        foreach (GameObject button in _buttons)
+        {
+            button.SetActive(false);
+        }
+    }
+
     #endregion
 
     #region Unity Callbacks
@@ -84,11 +92,13 @@ public class Counting : MonoBehaviour
     private void OnEnable()
     {
         ButtonController.OnTurnCountAgain += TriggerCountingRound;
+        ScoreAndLives.OnFinishGame += GameOverDiseabelButtons;
     }
 
     private void OnDisable()
     {
         ButtonController.OnTurnCountAgain -= TriggerCountingRound;
+        ScoreAndLives.OnFinishGame -= GameOverDiseabelButtons;
     }
 
     private void Start()

@@ -11,6 +11,8 @@ public class ButtonController : MonoBehaviour
     [SerializeField] private int _lives;
     [SerializeField] private GameObject _crossError;
     [SerializeField] private Button[] _buttonsToPlay;
+    [SerializeField] private AudioSource _crossBipError;
+    [SerializeField] private AudioClip _bipError;
 
     private List<int> _listSequence = new List<int>();
     private List<int> _playerSequence = new List<int>();
@@ -90,14 +92,15 @@ public class ButtonController : MonoBehaviour
     {
         Time.timeScale = 0;
         _crossError.SetActive(true);
+        _crossBipError.clip = _bipError;
+        _crossBipError.Play();
+
         yield return new WaitForSecondsRealtime(0.5f);
         _crossError.SetActive(false);
         Time.timeScale = 1;
     }
 
-    // Check for game over
-
-
+    // Let use buttons or not
     private void EnableAllButtons()
     {
         foreach (Button button in _buttonsToPlay)
@@ -108,6 +111,15 @@ public class ButtonController : MonoBehaviour
     {
         foreach (Button button in _buttonsToPlay)
             button.interactable = false;
+    }
+
+    //Diseable buttons
+    private void TurnOffButtons()
+    {
+        foreach (Button button in _buttonsToPlay)
+        {
+            button.gameObject.SetActive(false);
+        }
     }
 
     #endregion
@@ -124,6 +136,7 @@ public class ButtonController : MonoBehaviour
         ButtonPress.OnButtonTouched += HandleButtonPress;
         Monkey.OnEnableButtons += EnableAllButtons;
         Monkey.OnDisableButtons += DisableAllButtons;
+        ScoreAndLives.OnFinishGame += TurnOffButtons;
     }
 
     private void OnDisable()
@@ -131,6 +144,7 @@ public class ButtonController : MonoBehaviour
         ButtonPress.OnButtonTouched -= HandleButtonPress;
         Monkey.OnEnableButtons -= EnableAllButtons;
         Monkey.OnDisableButtons -= DisableAllButtons;
+        ScoreAndLives.OnFinishGame -= TurnOffButtons;
     }
 
     #endregion

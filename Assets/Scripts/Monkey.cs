@@ -137,7 +137,7 @@ public class Monkey : MonoBehaviour
         Counting.OnStartDanceMonkey += StartDance;
         ScoreAndLives.OnFinishGame += DisableMonkeyForGameOver;
         ButtonController.OnStopDanceMonkey += StopDanceForRound;
-        Monkey.OnEnableButtons += EnableIdleAnimation; // Restore idle animation during wait
+        Monkey.OnEnableButtons += EnableIdleAnimation;
     }
 
     private void OnDisable()
@@ -145,7 +145,7 @@ public class Monkey : MonoBehaviour
         Counting.OnStartDanceMonkey -= StartDance;
         ScoreAndLives.OnFinishGame -= DisableMonkeyForGameOver;
         ButtonController.OnStopDanceMonkey -= StopDanceForRound;
-        Monkey.OnEnableButtons -= EnableIdleAnimation; // Unsubscribe idle animation event
+        Monkey.OnEnableButtons -= EnableIdleAnimation; 
     }
 
     private void Start()

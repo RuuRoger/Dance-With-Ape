@@ -1,8 +1,8 @@
 using UnityEngine;
 using TMPro;
-using Microsoft.Unity.VisualStudio.Editor;
 using DG.Tweening;
 using System;
+using System.Collections;
 
 public class ScoreAndLives : MonoBehaviour
 {
@@ -11,15 +11,23 @@ public class ScoreAndLives : MonoBehaviour
     [SerializeField] private GameObject _banana;
     [SerializeField] private GameObject _monkeyUI;
     [SerializeField] private int _livesValue;
+    [SerializeField] private GameObject _containerUIMenuGame;
     private int _score;
-    private int _scoreNumber;
+    private AudioSource _gameOversound;
+    private bool _gameOverFlag; //This flag is to play sund one time only
 
-    public static event Action OnFinishGame; //Goes to "Monkey"
+    public static event Action OnFinishGame; //Goes to Monkey, ButtonPress, ButtonControler, Counting
 
     private void ShowUI()
     {
         //Banana UI
         _score++;
+        if ((_score % 5 == 0) && _score > 0)
+        {
+            _livesValue++;
+            _livesTextUI.text = _livesValue.ToString();
+            Debug.Log($"Vidas: {_livesValue}");
+        }
         _bannanaScore.text = _score.ToString();
         _banana.SetActive(true);
         _bannanaScore.alpha = 1f;
@@ -50,12 +58,25 @@ public class ScoreAndLives : MonoBehaviour
 
     private void CheckGameOver()
     {
-        if (_livesValue <= 0)
+        if (_livesValue <= 0 && !_gameOverFlag)
         {
+            _gameOverFlag = true;
+
             Debug.Log("Game over!");
             OnFinishGame?.Invoke();
+
+            StartCoroutine(MenuGameOver());
+           
         }
     }
+
+    private IEnumerator MenuGameOver()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _containerUIMenuGame.SetActive(true);
+        _gameOversound.Play();
+    }
+
 
     private void CurrentLives()
     {
@@ -66,6 +87,8 @@ public class ScoreAndLives : MonoBehaviour
     {
         _score = int.Parse(_bannanaScore.text);
         _livesTextUI.text = _livesValue.ToString();
+        _gameOversound = GetComponent<AudioSource>();
+        _gameOverFlag = false;
 
     }
 
@@ -89,6 +112,5 @@ public class ScoreAndLives : MonoBehaviour
         CurrentLives();
     }
 
-    //Falta saber si funciona
-    //Correctamente la asignacion de puntos
+
 }

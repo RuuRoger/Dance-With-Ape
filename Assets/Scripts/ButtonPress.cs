@@ -50,6 +50,7 @@ public class ButtonPress : MonoBehaviour, IPointerClickHandler
         ScoreAndLives.OnFinishGame += DisableButton;
         Monkey.OnEnableButtons += EnableButton;
         Monkey.OnDisableButtons += DisableButton;
+
     }
 
     private void OnDisable()
