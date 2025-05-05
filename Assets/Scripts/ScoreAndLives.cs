@@ -72,7 +72,7 @@ public class ScoreAndLives : MonoBehaviour
 
     private IEnumerator MenuGameOver()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         _containerUIMenuGame.SetActive(true);
         _gameOversound.Play();
     }
