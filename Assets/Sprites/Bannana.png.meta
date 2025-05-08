@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Bannana_0: 7505979483227293835
+      Bannana_1: 1666663842774503913
+      Bannana_2: 4571183527808654567
+      Bannana_3: -586552521473768335
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

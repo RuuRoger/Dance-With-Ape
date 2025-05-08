@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonPress : MonoBehaviour, IPointerClickHandler
+public class ButtonPress : MonoBehaviour, IPointerUpHandler
 {
     #region Fields
     [Header("Buttons ID")]
@@ -19,7 +19,7 @@ public class ButtonPress : MonoBehaviour, IPointerClickHandler
     #region Methods
 
     //If boolean is true, let use buttons
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         if (_isInteractable)
         {
